@@ -45,7 +45,7 @@
 			let functionID = () => {
 				return Math.round(Math.random() * 10000)
 			}
-			let calcSuitability = (indv) => {
+			let calcSuitability = indv => {
 				let sum = 0
 				
 				indv.DNA.forEach((gene, index) => sum += resources[index] - gene)

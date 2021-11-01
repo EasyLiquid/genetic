@@ -63,7 +63,7 @@ class Population {
 		// количество родительских пар
 		this.countCouples = options.countCouples >= 1 ? options.countCouples : 1
 		
-		// порог степени разности хромосом
+		// порог разности генотипов
 		this.limitDifference = options.limitDifference >= 0 ? options.limitDifference : 0
 		
 		// тип рекомбинации
@@ -159,6 +159,7 @@ class Population {
 				}
 			}
 			
+			// завершение функции
 			return
 		}
 		
@@ -235,12 +236,13 @@ class Population {
 		}
 		
 		// инбридинг и аутбридинг
+		// предупреждение
 		if (!this.limitDifference) {
-			console.log('Порог разности хромосом не может быть меньше 0!')
+			console.log('Порог разности генотипов не может быть меньше 0!')
 			return
 		}
 		
-		// степень разности хромосом
+		// разность генотипов
 		let difference = 0
 		
 		// счётчик хромосом
@@ -259,7 +261,7 @@ class Population {
 			for (let i = 0; i < this.indvs.length - 1; i++) {
 				for (let j = ++i; j < this.indvs.length; j++) {
 					
-					// вычисление степени разности между текущей и предыдущей особями
+					// вычисление разности генотипов между текущей и предыдущей особями
 					this.indvs[i].DNA.map(gene => difference += Math.abs(gene - this.indvs[j].DNA[k++]))
 					
 					// проверка на инбридинг/аутбридинг
@@ -267,7 +269,7 @@ class Population {
 					outbreeding = this.typeSelectionParents == 'outbreeding' && difference >= this.limitDifference
 					if (inbreeding || outbreeding) check = true
 					
-					// сброс степени разности хромосом
+					// сброс разности генотипов
 					difference = 0
 					
 					// сброс счётчика хромосом
@@ -284,7 +286,7 @@ class Population {
 			// если не одна и та же особь
 			if (indv1 != indv2) {
 				
-				// вычисление степени разности между случайными особями
+				// вычисление разности генотипов между случайными особями
 				indv1.DNA.map(gene => difference += Math.abs(gene - indv2.DNA[k++]))
 				
 				// проверка на инбридинг и аутбридинг
@@ -301,7 +303,7 @@ class Population {
 					currentCouples++
 				}
 				
-				// сброс степени разности хромосом
+				// сброс разности генотипов
 				difference = 0
 				
 				// сброс счётчика хромосом
@@ -471,7 +473,7 @@ class Population {
 			// цикл вытеснения похожих особей
 			while (this.indvs.length > countIndvs) {
 				
-				// степень разности хромосом
+				// разность генотипов
 				let difference = 0
 				
 				// счётчик хромосом
@@ -484,13 +486,13 @@ class Population {
 				for (let i = 0; i < this.indvs.length - 1; i++) {
 					for (let j = ++i; j < this.indvs.length; j++) {
 						
-						// вычисление степени разности между текущей и предыдущей особями
+						// вычисление разности генотипов между текущей и предыдущей особями
 						this.indvs[i].DNA.map(gene => difference += Math.abs(gene - this.indvs[j].DNA[k++]))
 						
 						// если условие истинно
 						if (difference > this.limitDifference) check = true
 						
-						// сброс степени разности хромосом
+						// сброс разности генотипов
 						difference = 0
 						
 						// сброс счётчика хромосом
@@ -510,10 +512,10 @@ class Population {
 				// случайная особь2
 				let indv2 = this.indvs[index2]
 				
-				// вычисление степени разности хромосом
+				// вычисление разности генотипов
 				indv1.DNA.map(gene => difference += Math.abs(gene - indv2.DNA[k++]))
 				
-				// если степень разницы ниже порога или отсутствуют разные особи
+				// если разность генотипов ниже порога или отсутствуют разные особи
 				if (difference < this.limitDifference || !check) {
 					
 					// бросок на вытеснение
@@ -529,7 +531,7 @@ class Population {
 					}
 				}
 				
-				// сброс степени разности хромосом
+				// сброс разности генотипов
 				difference = 0
 				
 				// сброс счётчика хромосом
