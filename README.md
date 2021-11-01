@@ -65,9 +65,9 @@
 Пример функции вычисления пригодности особи:
 
 	// параметры окружающей среды
-	let p = Math.round(Math.random() * 10)
-	let p = Math.round(Math.random() * 10)
-	let p = Math.round(Math.random() * 10)
+	let p1 = Math.round(Math.random() * 10)
+	let p2 = Math.round(Math.random() * 10)
+	let p3 = Math.round(Math.random() * 10)
 
 	let parameters = new Array(p1, p2, p3) // массив параметров
 
