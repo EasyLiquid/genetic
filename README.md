@@ -38,9 +38,9 @@
 		
 		typeRecombination: 'discrete', // тип рекомбинации (по умолчанию 'discrete')
 		
-		densityMutation: 0.5, // плотность мутации (по умолчанию 0.5)
+		densityMutation: 0.5, // плотность мутации от 0.01 до 0.99 (по умолчанию 0.5)
 		
-		chanceMutation: 0.5, // вероятность мутации (по умолчанию 0.5)
+		chanceMutation: 0.5, // вероятность мутации: от 0.01 до 0.99 (по умолчанию 0.5)
 		
 		typeNewPopulation: 'truncation', // тип отбора в новую популяцию (по умолчанию 'truncation')
 		
