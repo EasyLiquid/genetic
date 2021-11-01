@@ -259,7 +259,7 @@ class Population {
 			
 			// проверка на наличие инбредных/аутбредных особей
 			for (let i = 0; i < this.indvs.length - 1; i++) {
-				for (let j = ++i; j < this.indvs.length; j++) {
+				for (let j = i + 1; j < this.indvs.length; j++) {
 					
 					// вычисление разности генотипов между текущей и предыдущей особями
 					this.indvs[i].DNA.map(gene => difference += Math.abs(gene - this.indvs[j].DNA[k++]))
@@ -484,7 +484,7 @@ class Population {
 				
 				// проверка на наличие разных особей
 				for (let i = 0; i < this.indvs.length - 1; i++) {
-					for (let j = ++i; j < this.indvs.length; j++) {
+					for (let j = i + 1; j < this.indvs.length; j++) {
 						
 						// вычисление разности генотипов между текущей и предыдущей особями
 						this.indvs[i].DNA.map(gene => difference += Math.abs(gene - this.indvs[j].DNA[k++]))
