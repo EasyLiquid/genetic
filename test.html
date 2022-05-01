@@ -10,31 +10,37 @@
 				position: absolute;
 				left: 25%;
 			}
+			
+			#buttons {
+				display: flex;
+				justify-content: space-evenly;
+			}
 		</style>
 	</head>
 	<body>
 		<div id="milieu">
-			Ресурс1: <div style="display:inline" id="resources0"></div>
+			<br>Ресурс1: <div style="display:inline" id="resources0"></div>
 			<br>Ресурс2: <div style="display:inline" id="resources1"></div>
 			<br>Ресурс3: <div style="display:inline" id="resources2"></div>
-			<br>Эпоха: <div style="display:inline" id="epoch"></div>
 			
-			<br><br><div id="population"></div>
+			<p>Эпоха: <div style="display:inline" id="epoch"></div></p>
 			
-			<br><br><button onclick="createMilieu()">Создать среду</button>
-			&nbsp;&nbsp;&nbsp;<button onclick="createPopulation()">Создать популяцию</button>
-			&nbsp;&nbsp;&nbsp;<button onclick="start()">Запустить фитнес</button>
+			<p id="population"></p>
 			
-			<br><br>Порог пригодности: <input type="number" style="width:60px" min="1" max="10" step="1" value="5" id="limit_suitability">
+			<p id="buttons"><button onclick="createMilieu()">Создать среду</button>
+			<button onclick="createPopulation()">Создать популяцию</button>
+			<button onclick="start()">Запустить фитнес</button></p>
+			
+			<p>Порог пригодности: <input type="number" style="width:60px" min="1" max="10" step="1" value="5" id="limit_suitability">
 			<br>Плотность мутации: <input type="number" style="width:60px" min="0.01" max="0.99" step="0.01" value="0.5" id="density_mutation">
-			<br>Плотность мутации: <input type="number" style="width:60px" min="0.01" max="0.99" step="0.01" value="0.5" id="chance_mutation">
+			<br>Плотность мутации: <input type="number" style="width:60px" min="0.01" max="0.99" step="0.01" value="0.5" id="chance_mutation"></p>
 			
-			<br><br><b>В скобках указана пригодность особи</b>
-			<br><br>
+			<p><b>В скобках указана пригодность особи</b></p>
 		</div>
 		
 		<script src="genetic.js"></script>
 		<script>
+			
 			function $(id) {
 				return document.getElementById(id)
 			}
@@ -42,9 +48,11 @@
 			let resources = []
 			let population = {}
 			let epoch = 0
+			
 			let functionID = () => {
 				return Math.round(Math.random() * 10000)
 			}
+			
 			let calcSuitability = indv => {
 				let sum = 0
 				
@@ -53,11 +61,13 @@
 			}
 			
 			function createMilieu() {
+				
 				let food = Math.round(Math.random() * 10)
 				let building = Math.round(Math.random() * 10)
 				let technical = Math.round(Math.random() * 10)
 				
 				resources = new Array(food, building, technical)
+				
 				for (let i = 0; i < 3; i++) {
 					$(`resources${i}`).innerHTML = resources[i]
 				}
@@ -85,7 +95,9 @@
 					min: 1,
 					max: 10
 				})
+				
 				$('population').innerHTML = ''
+				
 				for (let indv of population.indvs) {
 					$('population').innerHTML += `<br>Особь ${indv.id}: ${indv.DNA.join(', ')} (${indv.suitability})`
 				}
@@ -100,10 +112,13 @@
 				population.selectionParents()
 				population.recombination()
 				population.newPopulation()
+				
 				$('population').innerHTML = ''
+				
 				for (let indv of population.indvs) {
 					$('population').innerHTML += `<br>Особь ${indv.id}: ${indv.DNA.join(', ')} (${indv.suitability})`
 				}
+				
 				$('epoch').innerHTML = ++epoch
 			}
 			
