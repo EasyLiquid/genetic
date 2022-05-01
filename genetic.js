@@ -1,7 +1,9 @@
 // *** СЛУЖЕБНЫЕ ФУНКЦИИ ***
 
-// округление
+// функция округления чисел
 function round(_number, afterComma) {
+	
+	// возврат округлённого числа
 	return parseFloat(_number.toFixed(afterComma))
 }
 
@@ -10,6 +12,8 @@ function round(_number, afterComma) {
 
 // особь
 class Individual {
+	
+	// конструктор класса
 	constructor(functionID) {
 		
 		// ID особи по умолчанию
@@ -25,6 +29,8 @@ class Individual {
 
 // популяция
 class Population {
+	
+	// конструктор класса
 	constructor(options) {
 		
 		// исходная популяция
@@ -86,13 +92,19 @@ class Population {
 	
 	// инициализация особей
 	initIndvs(count) {
+		
+		// перебор особей
 		for (let i = 0; i < count; i++) {
+			
+			// инициализация
 			this.indvs.push(new Individual(this.functionID()))
 		}
 	}
 	
 	// инициализация ДНК
 	initDNA(options) {
+		
+		// если параметры корректны
 		if (options.count && options.min && options.max) {
 			
 			// перебор особей
@@ -103,7 +115,13 @@ class Population {
 					indv.DNA.push(Math.round(Math.random() * (options.max - options.min) + options.min))
 				}
 			}
-		} else {console.log('Не указан один или несколько параметров инициализации ДНК!')}
+			
+		// если не корректны
+		} else {
+			
+			// сообщение
+			console.log('Не указан один или несколько параметров инициализации ДНК!')
+		}
 	}
 	
 	// отбор приспособленных особей
@@ -112,13 +130,15 @@ class Population {
 		// массив выбранных особей
 		let selected = []
 		
-		// вычисление пригодности каждой особи
+		// перебор особей
 		for (let indv of this.indvs) {
+			
+			// вычисление пригодности каждой особи
 			this.calcSuitability(indv)
 		}
 		
 		// турнирный отбор
-		if (this.typeSelection == 'tournament') {
+		if (this.typeSelection === 'tournament') {
 			
 			// массив отборочного тура
 			let tour = []
@@ -139,10 +159,12 @@ class Population {
 					
 					// запись в отборочный тур
 					for (let k = 0; k < this.sizeTour; k++) {
+						
+						// особь
 						let indv
 						
 						// отбор из популяции
-						if (i == 0) indv = this.indvs[Math.floor(Math.random() * this.indvs.length)]
+						if (i === 0) indv = this.indvs[Math.floor(Math.random() * this.indvs.length)]
 						
 						// отбор из выбранных
 						if (i > 0) indv = selected[Math.floor(Math.random() * selected.length)]
@@ -164,11 +186,15 @@ class Population {
 		}
 		
 		// рулеточный отбор
-		if (this.typeSelection == 'roulette-wheel') {
+		if (this.typeSelection === 'roulette-wheel') {
 			
-			// предупреждение
+			// если нет количества вращений
 			if (!this.countAttempts) {
+				
+				// сообщение
 				console.log('Количество вращений рулетки не может быть меньше 2!')
+				
+				// завершение функции
 				return
 			}
 			
@@ -190,8 +216,10 @@ class Population {
 				// случайное число
 				let attempt = Math.random()
 				
-				// поиск диапазона выпавшего числа
+				// перебор особей
 				for (let i = 1; i < this.indvs.length; i++) {
+					
+					// выбор особи
 					if (attempt > chances[i - 1] && attempt < chances[i]) selected.push(this.indvs[i])
 				}
 			}
@@ -201,9 +229,13 @@ class Population {
 	// подбор родительских пар
 	selectionParents() {
 		
-		// предупреждение
+		// если нет порога
 		if (!this.countCouples) {
+			
+			// сообщение
 			console.log('Количество родительских пар не может быть меньше 1!')
+			
+			// завершение функции
 			return
 		}
 		
@@ -211,7 +243,7 @@ class Population {
 		this.parents = []
 		
 		// панмиксия
-		if (this.typeSelectionParents == 'panmixia') {
+		if (this.typeSelectionParents === 'panmixia') {
 			
 			// промежуточный массив
 			let couple = []
@@ -232,13 +264,18 @@ class Population {
 				couple = []
 			}
 			
+			// завершение функции
 			return
 		}
 		
 		// инбридинг и аутбридинг
-		// предупреждение
+		// если нет порога
 		if (!this.limitDifference) {
+			
+			// сообщение
 			console.log('Порог разности генотипов не может быть меньше 0!')
+			
+			// завершение
 			return
 		}
 		
@@ -265,8 +302,8 @@ class Population {
 					this.indvs[i].DNA.map(gene => difference += Math.abs(gene - this.indvs[j].DNA[k++]))
 					
 					// проверка на инбридинг/аутбридинг
-					inbreeding = this.typeSelectionParents == 'inbreeding' && difference <= this.limitDifference
-					outbreeding = this.typeSelectionParents == 'outbreeding' && difference >= this.limitDifference
+					inbreeding = this.typeSelectionParents === 'inbreeding' && difference <= this.limitDifference
+					outbreeding = this.typeSelectionParents === 'outbreeding' && difference >= this.limitDifference
 					if (inbreeding || outbreeding) check = true
 					
 					// сброс разности генотипов
@@ -290,8 +327,8 @@ class Population {
 				indv1.DNA.map(gene => difference += Math.abs(gene - indv2.DNA[k++]))
 				
 				// проверка на инбридинг и аутбридинг
-				inbreeding = this.typeSelectionParents == 'inbreeding' && difference <= this.limitDifference
-				outbreeding = this.typeSelectionParents == 'outbreeding' && difference >= this.limitDifference
+				inbreeding = this.typeSelectionParents === 'inbreeding' && difference <= this.limitDifference
+				outbreeding = this.typeSelectionParents === 'outbreeding' && difference >= this.limitDifference
 				
 				// если условие истинно или отсутствуют инбредные/аутбредные особи
 				if (inbreeding || outbreeding || !check) {
@@ -331,14 +368,14 @@ class Population {
 			for (let i = 0; i < parents[0].DNA.length; i++) {
 				
 				// дискретная
-				if (this.typeRecombination == 'discrete') {
+				if (this.typeRecombination === 'discrete') {
 					
 					// вычисление значения гена
 					indv.DNA.push(Math.random() < 0.5 ? parents[0].DNA[i] : parents[1].DNA[i])
 				}
 				
 				// промежуточная
-				if (this.typeRecombination == 'intermediate') {
+				if (this.typeRecombination === 'intermediate') {
 					
 					// параметр промежуточной рекомбинации
 					let alpha1 = Math.random() * 1.5 - 0.25
@@ -348,7 +385,7 @@ class Population {
 				}
 				
 				// линейная
-				if (this.typeRecombination == 'linear') {
+				if (this.typeRecombination === 'linear') {
 					
 					// вычисление значения гена
 					indv.DNA.push(Math.round(parents[0].DNA[i] + alpha * (parents[1].DNA[i] - parents[0].DNA[i])))
@@ -395,11 +432,15 @@ class Population {
 		this.children = []
 		
 		// отбор усечением
-		if (this.typeNewPopulation == 'truncation') {
+		if (this.typeNewPopulation === 'truncation') {
 			
-			// предупреждение
+			// если нет порога
 			if (!this.limitSuitability) {
+				
+				// сообщение
 				console.log('Порог пригодности не может быть меньше 0!')
+				
+				// завершение функции
 				return
 			}
 			
@@ -414,7 +455,7 @@ class Population {
 				if (redundant.length > 0) index = Math.floor(Math.random() * redundant.length)
 				
 				// если непригодные особи отсутствуют
-				if (redundant.length == 0) index = Math.floor(Math.random() * this.indvs.length)
+				if (redundant.length === 0) index = Math.floor(Math.random() * this.indvs.length)
 				
 				// удаление непригодной особи
 				this.indvs.splice(index, 1)
@@ -422,11 +463,15 @@ class Population {
 		}
 		
 		// элитарный отбор
-		if (this.typeNewPopulation == 'elite') {
+		if (this.typeNewPopulation === 'elite') {
 			
-			// предупреждение
+			// если нет порога
 			if (!this.limitSuitability) {
+				
+				// сообщение
 				console.log('Порог пригодности не может быть меньше 0!')
+				
+				// завершение функции
 				return
 			}
 			
@@ -453,7 +498,7 @@ class Population {
 				}
 				
 				// если пригодные особи отсутствуют
-				if (selected.length == 0) {
+				if (selected.length === 0) {
 					
 					// индекс случайной пригодной особи
 					index = Math.floor(Math.random() * this.indvs.length)
@@ -468,7 +513,7 @@ class Population {
 		}
 		
 		// отбор вытеснением
-		if (this.typeNewPopulation == 'displacement') {
+		if (this.typeNewPopulation === 'displacement') {
 			
 			// цикл вытеснения похожих особей
 			while (this.indvs.length > countIndvs) {
@@ -489,7 +534,7 @@ class Population {
 						// вычисление разности генотипов между текущей и предыдущей особями
 						this.indvs[i].DNA.map(gene => difference += Math.abs(gene - this.indvs[j].DNA[k++]))
 						
-						// если условие истинно
+						// если разница больше порога
 						if (difference > this.limitDifference) check = true
 						
 						// сброс разности генотипов
@@ -518,12 +563,13 @@ class Population {
 				// если разность генотипов ниже порога или отсутствуют разные особи
 				if (difference < this.limitDifference || !check) {
 					
-					// бросок на вытеснение
+					// если бросок на вытеснение удачный
 					if (Math.random() < 0.5) {
 						
 						// вытеснение особи1
 						this.indvs.splice(index1, 1)
 						
+					// если неудачный
 					} else {
 						
 						// вытеснение особи2
