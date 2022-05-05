@@ -14,37 +14,38 @@
 
 Инициализировать популяцию можно следующим образом:
 
+	// все значения указаны по умолчанию
 	let population = new Population({
 		
 		functionID: functionID, // функция присвоения ID особи (обязательный параметр)
 		
-		typeSelection: 'roulette-wheel', // тип отбора (по умолчанию 'roulette-wheel')
+		typeSelection: 'roulette-wheel', // тип отбора
 		
 		calcSuitability: calcSuitability, // функция вычисления пригодности (обязательный параметр)
 		
-		countTournaments: 1, // количество турниров (по умолчанию 1)
+		countTournaments: 1, // количество турниров
 		
-		countTours: 2, // количество отборочных туров (по умолчанию 2)
+		countTours: 2, // количество отборочных туров
 		
-		sizeTour: 2, // размер отборочного тура (по умолчанию 2)
+		sizeTour: 2, // размер отборочного тура
 		
-		countAttempts: 2, // количество вращений рулетки (по умолчанию 2)
+		countAttempts: 2, // количество вращений рулетки
 		
-		typeSelectionParents: 'panmixia', // тип подбора родителей (по умолчанию 'panmixia')
+		typeSelectionParents: 'panmixia', // тип подбора родителей
 		
-		countCouples: 1, // количество родительских пар (по умолчанию 1)
+		countCouples: 1, // количество родительских пар
 		
-		limitDifference: 0, // порог разности генотипов (по умолчанию 0)
+		limitDifference: 0, // порог разности генотипов
 		
-		typeRecombination: 'discrete', // тип рекомбинации (по умолчанию 'discrete')
+		typeRecombination: 'discrete', // тип рекомбинации
 		
-		densityMutation: 0.5, // плотность мутации от 0.01 до 0.99 (по умолчанию 0.5)
+		densityMutation: 0.5, // плотность мутации от 0.01 до 0.99
 		
-		chanceMutation: 0.5, // вероятность мутации: от 0.01 до 0.99 (по умолчанию 0.5)
+		chanceMutation: 0.5, // вероятность мутации: от 0.01 до 0.99
 		
-		typeNewPopulation: 'truncation', // тип отбора в новую популяцию (по умолчанию 'truncation')
+		typeNewPopulation: 'truncation', // тип отбора в новую популяцию
 		
-		limitSuitability: 0 // порог пригодности особей (по умолчанию 0)
+		limitSuitability: 0 // порог пригодности особей
 	})
 
 Далее необходимо инициализировать особей и их ДНК:
@@ -77,7 +78,7 @@
 		
 		indv.DNA.forEach((gene, index) => sum += parameters[index] - gene) // вычитание значения гена из параметра среды
 		
-		indv.suitability = round(sum, 2) // округление результата
+		return round(sum, 2) // округление результата
 	}
 
 Встроенная утилита `round(_number, afterComma)` округляет значение числа, принимая первым параметром число, а вторым — количество знаков после запятой.

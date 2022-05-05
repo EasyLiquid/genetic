@@ -42,54 +42,61 @@
 		<script>
 			
 			function $(id) {
+				
 				return document.getElementById(id)
 			}
 			
 			let resources = []
+			
 			let population = {}
+			
 			let epoch = 0
 			
 			let functionID = () => {
+				
 				return Math.round(Math.random() * 10000)
 			}
 			
 			let calcSuitability = indv => {
+				
 				let sum = 0
 				
 				indv.DNA.forEach((gene, index) => sum += resources[index] - gene)
-				indv.suitability = round(sum, 2)
+				
+				return round(sum, 2)
 			}
 			
 			function createMilieu() {
 				
 				let food = Math.round(Math.random() * 10)
+				
 				let building = Math.round(Math.random() * 10)
+				
 				let technical = Math.round(Math.random() * 10)
 				
 				resources = new Array(food, building, technical)
 				
 				for (let i = 0; i < 3; i++) {
+					
 					$(`resources${i}`).innerHTML = resources[i]
 				}
 			}
 			
 			function createPopulation() {
+				
 				population = new Population({
 					functionID: functionID,
 					typeSelection: 'roulette-wheel',
 					calcSuitability: calcSuitability,
-					countTournaments: 1,
-					countTours: 3,
-					sizeTour: 2,
 					countAttempts: 5,
 					typeSelectionParents: 'panmixia',
-					limitDifference: 2,
 					countCouples: 5,
 					typeRecombination: 'discrete',
-					typeNewPopulation: 'truncation',
+					typeNewPopulation: 'truncation'
 				})
 				
 				population.initIndvs(5)
+				
 				population.initDNA({
 					count: 3,
 					min: 1,
@@ -99,23 +106,31 @@
 				$('population').innerHTML = ''
 				
 				for (let indv of population.indvs) {
+					
 					$('population').innerHTML += `<br>Особь ${indv.id}: ${indv.DNA.join(', ')} (${indv.suitability})`
 				}
 			}
 			
 			function fitness() {
-				population.limitSuitability = $('limit_suitability').value
-				population.densityMutation = $('density_mutation').value
-				population.chanceMutation = $('chance_mutation').value
+				
+				population.limitSuitability = +$('limit_suitability').value
+				
+				population.densityMutation = +$('density_mutation').value
+				
+				population.chanceMutation = +$('chance_mutation').value
 				
 				population.selection()
+				
 				population.selectionParents()
+				
 				population.recombination()
+				
 				population.newPopulation()
 				
 				$('population').innerHTML = ''
 				
 				for (let indv of population.indvs) {
+					
 					$('population').innerHTML += `<br>Особь ${indv.id}: ${indv.DNA.join(', ')} (${indv.suitability})`
 				}
 				
@@ -123,10 +138,10 @@
 			}
 			
 			function start() {
+				
 				setInterval(() => {
-					if (resources && population) {
-						fitness()
-					}
+				
+					if (resources && population) fitness()
 				}, 1000)
 			}
 		</script>
