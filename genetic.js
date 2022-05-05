@@ -147,7 +147,7 @@ class Population {
 		}
 		
 		// проверка на ошибки
-		if (errorMessage(check, this.messages[0])) return
+		if (this.errorMessage(check, this.messages[0])) return
 		
 		// перебор особей
 		this.indvs.forEach(indv => {
@@ -174,11 +174,11 @@ class Population {
 		if (this.typeSelection === 'tournament') {
 			
 			// проверка на ошибки
-			if (errorMessage(!this.countTournaments, this.messages[1])) return
+			if (this.errorMessage(!this.countTournaments, this.messages[1])) return
 			
-			if (errorMessage(!this.countTours, this.messages[2])) return
+			if (this.errorMessage(!this.countTours, this.messages[2])) return
 			
-			if (errorMessage(!this.sizeTour, this.messages[3])) return
+			if (this.errorMessage(!this.sizeTour, this.messages[3])) return
 			
 			// перебор турниров
 			for (let i = 0; i < this.countTournaments; i++) {
@@ -215,7 +215,7 @@ class Population {
 		if (this.typeSelection === 'roulette-wheel') {
 			
 			// проверка на ошибки
-			if (errorMessage(!this.countAttempts, this.messages[4])) return
+			if (this.errorMessage(!this.countAttempts, this.messages[4])) return
 			
 			// вычисление общей пригодности
 			let sum = this.indvs.reduce((prev, curr) => prev.suitability + curr.suitability, 0)
@@ -243,7 +243,7 @@ class Population {
 	selectionParents() {
 		
 		// проверка на ошибки
-		if (errorMessage(!this.countCouples, this.messages[5])) return
+		if (this.errorMessage(!this.countCouples, this.messages[5])) return
 		
 		// очистка массива родителей
 		this.parents = []
@@ -276,7 +276,7 @@ class Population {
 		
 		// инбридинг и аутбридинг
 		// проверка на ошибки
-		if (errorMessage(!this.limitDifference, this.messages[6])) return
+		if (this.errorMessage(!this.limitDifference, this.messages[6])) return
 		
 		// разность генотипов
 		let difference = 0
@@ -390,9 +390,9 @@ class Population {
 				
 				// мутация
 				// проверка на ошибки
-				if (errorMessage(!this.densityMutation, this.messages[7])) return
+				if (this.errorMessage(!this.densityMutation, this.messages[7])) return
 				
-				if (errorMessage(!this.chanceMutation, this.messages[8])) return
+				if (this.errorMessage(!this.chanceMutation, this.messages[8])) return
 				
 				// бросок на возможность мутации гена
 				if (Math.random() < this.densityMutation) {
@@ -419,7 +419,7 @@ class Population {
 	newPopulation() {
 		
 		// проверка на ошибки
-		if (errorMessage(!this.limitSuitability, this.messages[6])) return
+		if (this.errorMessage(!this.limitSuitability, this.messages[6])) return
 		
 		// исходная численность популяции
 		let countIndvs = this.indvs.length
