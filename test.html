@@ -29,11 +29,11 @@
 			
 			<p id="buttons"><button onclick="createMilieu()">Создать среду</button>
 			<button onclick="createPopulation()">Создать популяцию</button>
-			<button onclick="start()">Запустить фитнес</button></p>
+			<button onclick="start()">Фитнес</button></p>
 			
-			<p>Порог пригодности: <input type="number" style="width:60px" min="1" max="10" step="1" value="5" id="limit_suitability">
+			<p>Порог пригодности: <input type="number" style="width:60px" value="-25" id="limit_suitability">
 			<br>Плотность мутации: <input type="number" style="width:60px" min="0.01" max="0.99" step="0.01" value="0.25" id="density_mutation">
-			<br>Плотность мутации: <input type="number" style="width:60px" min="0.01" max="0.99" step="0.01" value="0.25" id="chance_mutation"></p>
+			<br>Вероятность мутации: <input type="number" style="width:60px" min="0.01" max="0.99" step="0.01" value="0.25" id="chance_mutation"></p>
 			
 			<p><b>В скобках указана пригодность особи</b></p>
 		</div>
@@ -57,13 +57,16 @@
 				return Math.round(Math.random() * 10000)
 			}
 			
-			let calcSuitability = indv => {
+			function calcSuitability(indv) {
 				
 				let sum = 0
 				
-				indv.DNA.forEach((gene, index) => sum += resources[index] - gene)
+				indv.DNA.forEach((gene, index) => {
+					
+					sum -= Math.pow((gene - resources[index]), 2)
+				})
 				
-				return round(sum, 2)
+				return sum
 			}
 			
 			function createMilieu() {
@@ -85,6 +88,7 @@
 			function createPopulation() {
 				
 				population = new Population({
+					countIndvs: 5,
 					functionID: functionID,
 					typeSelection: 'roulette-wheel',
 					calcSuitability: calcSuitability,
@@ -92,10 +96,8 @@
 					typeSelectionParents: 'panmixia',
 					countCouples: 5,
 					typeRecombination: 'discrete',
-					typeNewPopulation: 'truncation'
+					typeNewPopulation: 'elite'
 				})
-				
-				population.initIndvs(5)
 				
 				population.initDNA({
 					count: 3,
@@ -105,10 +107,11 @@
 				
 				$('population').innerHTML = ''
 				
-				for (let indv of population.indvs) {
+				population.indvs.forEach(indv => {
 					
-					$('population').innerHTML += `<br>Особь ${indv.id}: ${indv.DNA.join(', ')} (${indv.suitability})`
-				}
+					$('population').innerHTML +=
+						`<br>Особь ${indv.id}: ${indv.DNA.join(', ')} (${indv.suitability})`
+				})
 			}
 			
 			function fitness() {
@@ -129,20 +132,24 @@
 				
 				$('population').innerHTML = ''
 				
-				for (let indv of population.indvs) {
+				population.indvs.forEach(indv => {
 					
-					$('population').innerHTML += `<br>Особь ${indv.id}: ${indv.DNA.join(', ')} (${indv.suitability})`
-				}
+					$('population').innerHTML +=
+						`<br>Особь ${indv.id}: ${indv.DNA.join(', ')} (${round(indv.suitability, 2)})`
+				})
 				
 				$('epoch').innerHTML = ++epoch
 			}
 			
 			function start() {
+			
+				if (resources && population) {
 				
-				setInterval(() => {
-				
-					if (resources && population) fitness()
-				}, 200)
+					for (let i = 0; i < 1; i++) {
+					
+						fitness()
+					}
+				}
 			}
 		</script>
 	</body>
