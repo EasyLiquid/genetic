@@ -92,18 +92,9 @@
 		return Math.round(Math.random() * 10000)
 	}
 
-Функция фитнеса:
+Запуск фитнеса:
 
-	function fitness() {
-		
-		population.selection() // запуск отбора для составления родительских пар
-		
-		population.selectionParents() // запуск подбора родительских пар
-		
-		population.recombination() // запуск рекомбинации и мутации
-		
-		population.newPopulation() // запуск отбора в новую популяцию
-	}
+	population.fitness() 
 
 ## Операторы алгоритма
 

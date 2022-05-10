@@ -544,4 +544,20 @@ class Population {
 			}
 		}
 	}
+	
+	// метод фитнеса популяции
+	fitness() {
+		
+		// начальный отбор
+		this.selection()
+		
+		// отбор родителей
+		this.selectionParents()
+		
+		// рекомбинация
+		this.recombination()
+		
+		// отбор в новую популяцию
+		this.newPopulation()
+	}
 }

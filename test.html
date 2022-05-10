@@ -122,15 +122,9 @@
 				
 				population.chanceMutation = +$('chance_mutation').value
 				
-				population.selection()
-				
-				population.selectionParents()
-				
-				population.recombination()
-				
-				population.newPopulation()
-				
 				$('population').innerHTML = ''
+				
+				population.fitness()
 				
 				population.indvs.forEach(indv => {
 					
