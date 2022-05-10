@@ -370,54 +370,55 @@ class Population {
 			// инициализация новой особи
 			let indv = new Individual(this.functionID())
 			
-			// параметр линейной рекомбинации
-			let alpha = Math.random() * 1.5 - 0.25
-			
 			// перебор хромосом
-			for (let i = 0; i < parents[0].DNA.length; i++) {
+			parents[0].DNA.forEach((gene, index) => {
 				
-				// дискретная
+				// дискретная рекомбинация
 				if (this.typeRecombination === 'discrete') {
 					
 					// вычисление значения гена
-					indv.DNA.push(Math.random() < 0.5 ? parents[0].DNA[i] : parents[1].DNA[i])
+					indv.DNA.push(Math.random() < 0.5 ? gene : parents[1].DNA[index])
 				}
 				
-				// промежуточная
+				// промежуточная рекомбинация
 				if (this.typeRecombination === 'intermediate') {
 					
-					// параметр промежуточной рекомбинации
-					let alpha1 = Math.random() * 1.5 - 0.25
+					// модификатор промежуточной рекомбинации
+					let alpha = random(-0.25, 1.25, 2)
 					
 					// вычисление значения гена
-					indv.DNA.push(Math.round(parents[0].DNA[i] + alpha1 * (parents[1].DNA[i] - parents[0].DNA[i])))
+					indv.DNA.push(Math.round(gene + alpha * (parents[1].DNA[index] - gene)))
 				}
 				
-				// линейная
+				// линейная рекомбинация
 				if (this.typeRecombination === 'linear') {
 					
+					// модификатор линейной рекомбинации
+					let alpha = Math.random() * 1.5 - 0.25
+					
 					// вычисление значения гена
-					indv.DNA.push(Math.round(parents[0].DNA[i] + alpha * (parents[1].DNA[i] - parents[0].DNA[i])))
+					indv.DNA.push(Math.round(gene + alpha * (parents[1].DNA[index] - gene)))
 				}
 				
 				// мутация
 				// проверка на ошибки
-				if (this.errorMessage(this.densityMutation < 0.01 || this.densityMutation > 0.99, this.messages[7])) return
+				if (this.errorMessage(this.densityMutation < 0.01
+					|| this.densityMutation > 0.99, this.messages[7])) return
 				
-				if (this.errorMessage(this.chanceMutation < 0.01 || this.chanceMutation > 0.99, this.messages[8])) return
+				if (this.errorMessage(this.chanceMutation < 0.01
+					|| this.chanceMutation > 0.99, this.messages[8])) return
 				
 				// бросок на возможность мутации гена
 				if (Math.random() < this.densityMutation) {
 					
 					// бросок на мутацию гена
-					indv.DNA[i] = Math.random() < this.chanceMutation ? ++indv.DNA[i] : --indv.DNA[i]
+					let attempt = Math.random() < this.chanceMutation
 					
-					// ограничения
-					if (indv.DNA[i] > 10) indv.DNA[i] = 10
-					
-					if (indv.DNA[i] < 0) indv.DNA[i] = 0
+					// бросок на направление мутации гена
+					if (attempt) indv.DNA[index] = Math.random() < 0.5
+						? --indv.DNA[index] : ++indv.DNA[index]
 				}
-			}
+			})
 			
 			// вычисление пригодности потомка
 			indv.suitability = this.calcSuitability(indv)
