@@ -87,7 +87,8 @@ class Population {
 			'Количество родительских пар не может быть меньше 1!',
 			'Порог разности генотипов не может быть меньше 0!',
 			'Плотность мутации должна быть от 0.01 до 0.1!',
-			'Вероятность мутации должна быть от 0.005 до 0.01!'
+			'Вероятность мутации должна быть от 0.005 до 0.01!',
+			'Шаг мутации должен быть числовым значением!'
 		]
 		
 		// инициализация числовых параметров
@@ -103,7 +104,7 @@ class Population {
 			['countTours', [2, Infinity]], ['sizeTour', [2, Infinity]],
 			['countAttempts', [2, Infinity]], ['countCouples', [1, Infinity]],
 			['limitDifference', [0, Infinity]], ['densityMutation', [0.01, 0.99]],
-			['chanceMutation', [0.01, 0.99]]
+			['chanceMutation', [0.01, 0.99]], ['stepMutation', [-Infinity, Infinity]]
 		])
 		
 		// перебор параметров
@@ -370,14 +371,20 @@ class Population {
 			// инициализация новой особи
 			let indv = new Individual(this.functionID())
 			
+			// модификатор линейной рекомбинации
+			let alphaLinear = random(-0.25, 1.25, 2)
+			
 			// перебор хромосом
-			parents[0].DNA.forEach((gene, index) => {
+			parents[0].DNA.forEach((gene1, index) => {
+				
+				// ген родителя2
+				let gene2 = parents[1].DNA[index]
 				
 				// дискретная рекомбинация
 				if (this.typeRecombination === 'discrete') {
 					
 					// вычисление значения гена
-					indv.DNA.push(Math.random() < 0.5 ? gene : parents[1].DNA[index])
+					indv.DNA.push(Math.random() < 0.5 ? gene1 : gene2)
 				}
 				
 				// промежуточная рекомбинация
@@ -387,17 +394,14 @@ class Population {
 					let alpha = random(-0.25, 1.25, 2)
 					
 					// вычисление значения гена
-					indv.DNA.push(Math.round(gene + alpha * (parents[1].DNA[index] - gene)))
+					indv.DNA.push(Math.round(gene1 + alpha * (gene2 - gene1)))
 				}
 				
 				// линейная рекомбинация
 				if (this.typeRecombination === 'linear') {
 					
-					// модификатор линейной рекомбинации
-					let alpha = Math.random() * 1.5 - 0.25
-					
 					// вычисление значения гена
-					indv.DNA.push(Math.round(gene + alpha * (parents[1].DNA[index] - gene)))
+					indv.DNA.push(Math.round(gene1 + alphaLinear * (gene2 - gene1)))
 				}
 				
 				// мутация
@@ -408,6 +412,9 @@ class Population {
 				if (this.errorMessage(this.chanceMutation < 0.01
 					|| this.chanceMutation > 0.99, this.messages[8])) return
 				
+				if (this.errorMessage(typeof this.stepMutation !== 'number',
+					this.errorMessage[9])) return
+				
 				// бросок на возможность мутации гена
 				if (Math.random() < this.densityMutation) {
 					
@@ -416,7 +423,7 @@ class Population {
 					
 					// бросок на направление мутации гена
 					if (attempt) indv.DNA[index] = Math.random() < 0.5
-						? --indv.DNA[index] : ++indv.DNA[index]
+						? indv.DNA[index] - this.stepMutation : indv.DNA[index] + this.stepMutation
 				}
 			})
 			
@@ -561,3 +568,6 @@ class Population {
 		this.newPopulation()
 	}
 }
+
+// экспорт
+module.exports = {round, random, Population}
