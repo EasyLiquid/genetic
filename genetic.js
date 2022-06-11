@@ -68,6 +68,9 @@ class Population {
 		this.limitSuitability = typeof options.limitSuitability === 'number'
 			? options.limitSuitability : 0
 		
+		// шаг мутации
+		this.stepMutation = options.stepMutation || 1
+		
 		// тип подбора родителей
 		this.typeSelectionParents = options.typeSelectionParents || 'panmixia'
 		
@@ -104,7 +107,7 @@ class Population {
 			['countTours', [2, Infinity]], ['sizeTour', [2, Infinity]],
 			['countAttempts', [2, Infinity]], ['countCouples', [1, Infinity]],
 			['limitDifference', [0, Infinity]], ['densityMutation', [0.01, 0.99]],
-			['chanceMutation', [0.01, 0.99]], ['stepMutation', [-Infinity, Infinity]]
+			['chanceMutation', [0.01, 0.99]]]
 		])
 		
 		// перебор параметров

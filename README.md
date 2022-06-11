@@ -45,7 +45,7 @@
 		
 		chanceMutation: 0.5, // вероятность мутации: от 0.01 до 0.99
 		
-		stepMutation: 1, // шаг мутации
+		stepMutation: 1, // шаг мутации (обязательный параметр)
 		
 		typeNewPopulation: 'truncation', // тип отбора в новую популяцию
 		
